@@ -5,6 +5,7 @@ from PIL import Image
 import numpy as np
 import io
 import os
+import sqlite3
 
 # Load the trained model
 model = tf.keras.models.load_model('resnetv2_skin_disease_model_2.h5')
@@ -14,10 +15,12 @@ app = Flask(__name__)
 CORS(app, origins="https://frontend-seven-iota-97.vercel.app")
 
 @app.route("/")
+@cross_origin()
 def home():
     return "Hello, Render!"
 
 @app.route('/chengml/upload', methods=['POST'])
+@cross_origin()
 def handle_post():
     if 'image' not in request.files:
         return jsonify({'error': 'No file part'}), 400
@@ -53,6 +56,50 @@ def handle_post():
 
     # You can return the predicted class label as needed, for example:
     return jsonify({'predicted_class': str(predicted_class)}), 200
+
+# Open the SQLite database
+db_path = "HoyaHack25a/frontend/src/databases/prescripts.db"
+conn = sqlite3.connect(db_path)
+cursor = conn.cursor()
+
+# Create the prescripts table if it doesn't exist (you may already have this)
+cursor.execute('''
+    CREATE TABLE IF NOT EXISTS prescripts (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        number TEXT NOT NULL,
+        name TEXT NOT NULL,
+        medicine TEXT NOT NULL,
+        dosage TEXT NOT NULL,
+        frequency TEXT NOT NULL
+    )
+''')
+conn.commit()
+
+@app.route("/api/scan", methods=["POST"])
+@cross_origin()
+def insert_data():
+    data = request.get_json()
+    number = data.get('number')
+    name = data.get('name')
+    medicine = data.get('medicine')
+    dosage = data.get('dosage')
+    frequency = data.get('frequency')
+
+    # Prepare the SQL query to insert data
+    sql = '''INSERT INTO prescripts (number, name, medicine, dosage, frequency) 
+             VALUES (?, ?, ?, ?, ?)'''
+    cursor.execute(sql, (number, name, medicine, dosage, frequency))
+    conn.commit()
+
+    return jsonify({
+        'id': cursor.lastrowid,
+        'number': number,
+        'name': name,
+        'medicine': medicine,
+        'dosage': dosage,
+        'frequency': frequency
+    }), 201
+
 
 if __name__ == '__main__':
     port = int(os.environ.get("PORT", 5000))
