@@ -4,6 +4,7 @@ from flask_cors import CORS
 from PIL import Image
 import numpy as np
 import io
+import os
 
 # Load the trained model
 model = tf.keras.models.load_model('resnetv2_skin_disease_model_2.h5')
@@ -54,4 +55,5 @@ def handle_post():
     return jsonify({'predicted_class': str(predicted_class)}), 200
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host='0.0.0.0', port=port, debug=True)

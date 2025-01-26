@@ -1,5 +1,6 @@
 tensorflow
-flask
-flask_cors
-pillow
+Flask
+flask-cors
+Pillow
+numpys
 gunicorn
