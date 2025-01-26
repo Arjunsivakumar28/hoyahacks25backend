@@ -4,4 +4,4 @@ flask-cors
 Pillow
 numpy
 gunicorn
-sqlite3
+sqlite3=5.1.7
