@@ -12,6 +12,10 @@ model = tf.keras.models.load_model('resnetv2_skin_disease_model_2.h5')
 app = Flask(__name__)
 CORS(app, origins="http://localhost:5173")
 
+@app.route("/")
+def home():
+    return "Hello, Render!"
+
 @app.route('/chengml/upload', methods=['POST'])
 def handle_post():
     if 'image' not in request.files:
