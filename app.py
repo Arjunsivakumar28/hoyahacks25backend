@@ -56,7 +56,7 @@ def handle_post():
     return jsonify({'predicted_class': str(predicted_class)}), 200
 
 # Open the SQLite database
-db_path = "HoyaHack25a/frontend/src/databases/prescripts.db"
+db_path = "databases/prescripts.db"
 conn = sqlite3.connect(db_path)
 cursor = conn.cursor()
 
@@ -73,8 +73,10 @@ cursor.execute('''
 ''')
 conn.commit()
 
-@app.route("/api/scan", methods=["POST"])
+@app.route("/scan", methods=["POST"])
 def insert_data():
+    print(request)
+    request = request.files['json']
     data = request.get_json()
     number = data.get('number')
     name = data.get('name')
