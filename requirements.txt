@@ -1,5 +1,4 @@
 tensorflow
 flask
 flask_cors
-PIL
-io
+pillow
