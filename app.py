@@ -12,15 +12,13 @@ model = tf.keras.models.load_model('resnetv2_skin_disease_model_2.h5')
 
 # Create Flask app
 app = Flask(__name__)
-CORS(app, origins="https://frontend-seven-iota-97.vercel.app")
+CORS(app)
 
 @app.route("/")
-@cross_origin()
 def home():
     return "Hello, Render!"
 
 @app.route('/chengml/upload', methods=['POST'])
-@cross_origin()
 def handle_post():
     if 'image' not in request.files:
         return jsonify({'error': 'No file part'}), 400
@@ -76,7 +74,6 @@ cursor.execute('''
 conn.commit()
 
 @app.route("/api/scan", methods=["POST"])
-@cross_origin()
 def insert_data():
     data = request.get_json()
     number = data.get('number')
