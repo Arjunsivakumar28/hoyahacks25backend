@@ -2,5 +2,5 @@ tensorflow
 Flask
 flask-cors
 Pillow
-numpys
+numpy
 gunicorn
