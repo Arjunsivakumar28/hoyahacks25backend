@@ -11,7 +11,7 @@ model = tf.keras.models.load_model('resnetv2_skin_disease_model_2.h5')
 
 # Create Flask app
 app = Flask(__name__)
-CORS(app, origins="http://localhost:5173")
+CORS(app, origins="https://frontend-seven-iota-97.vercel.app/")
 
 @app.route("/")
 def home():
